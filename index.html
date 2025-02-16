@@ -3,10 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Social Media Links & Previews</title>
+    <title>PARENT Social Media Links</title>
     <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
         :root {
+            --primary-light: #1877f2;
+            --primary-medium: #1877f2;
+            --primary-dark: #2c2c2c;
             --facebook-color: #1877f2;
             --tiktok-color: #000000;
             --line-color: #06C755;
@@ -56,16 +59,23 @@
             object-fit: cover;
         }
 
+        h1 {
+            color: var(--primary-light);
+            font-size: 2.5rem;
+            margin: 12px 0;
+            font-weight: 600;
+        }
+
         h2 {
             font-size: 24px;
-            color: #1a1a1a;
+            color: var(--primary-medium);
             margin: 12px 0;
             font-weight: 600;
         }
 
         .name {
             font-size: 18px;
-            color: #666;
+            color: var(--primary-dark);
             margin: 8px 0;
         }
 
@@ -134,21 +144,6 @@
             margin-bottom: 16px;
         }
 
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .social-card {
-            animation: fadeInUp 0.5s ease-out forwards;
-        }
-
         .center {
             display: block;
             margin-left: auto;
@@ -156,9 +151,9 @@
             text-align: center;
         }
 
-        .social-card:nth-child(1) { animation-delay: 0.1s; }
-        .social-card:nth-child(2) { animation-delay: 0.2s; }
-        .social-card:nth-child(3) { animation-delay: 0.3s; }
+        .line-oa {
+            color: var(--line-color);
+        }
 
         @media (max-width: 600px) {
             :root {
@@ -200,7 +195,7 @@
     <div class="platform-icon">
         <img src="https://scontent.fbkk29-4.fna.fbcdn.net/v/t39.30808-6/475892757_122210589758222157_5782840008004931319_n.jpg?_nc_cat=111&ccb=1-7&_nc_sid=a5f93a&_nc_eui2=AeHOpeZEkzRs4o6XaOy-WAYfEwrXKQ-bDa0TCtcpD5sNrbGjbYIZCW8fpr0I2ffBuTaIb5F6F9K9XQ_3nvSMh-ki&_nc_ohc=KmwwdvM04B8Q7kNvgFmnmMh&_nc_oc=AdgdmQxZTcd1zCxbt91yN5_KNdxZKkmBW3iFkux8IE_e2K3pteoiJMETCgrL0IVGLng&_nc_zt=23&_nc_ht=scontent.fbkk29-4.fna&_nc_gid=AV3YFuLj6Evn5WR1m2nJZAz&oh=00_AYCwRgbLoWmClqHutYAa40sLGjkVj-rIThYx1iIYMZIMOw&oe=67B4E466" alt="PARENT logo" width="200" class="center">
     </div>
-<h1 class="center">PARENT Socia Media</h1>
+    <h1 class="center">PARENT Social Media</h1>
 </div>
 
 <body>
@@ -209,11 +204,21 @@
         <div class="social-card">
             <div class="platform-icon">
                 <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/41/LINE_logo.svg/320px-LINE_logo.svg.png" alt="LINE OA Logo" class="logo">
-                <h2>PARENT</h2>
+                <h2 class="line-oa">Line OA : @phalen</h2>
             </div>
-            <p class="name">@phalen</p>
-            <div>
-                <img src="https://scontent.fbkk22-4.fna.fbcdn.net/v/t39.30808-6/476638595_122212984004222157_4152683487613763065_n.jpg?_nc_cat=109&ccb=1-7&_nc_sid=cc71e4&_nc_eui2=AeFHiAn5aFwq5lwVtRACeJQRjRSKA3piCHmNFIoDemIIeVOnVd0iZ5UYRZrIBGtOGJmR_c5S4fntDbu2vKoYmTUf&_nc_ohc=L9ircBsZaFMQ7kNvgEpNu6s&_nc_oc=AdhfRMcsIkrHrb783j4Oe4uNw7L78qJ9u5j16gGN-6_bW4nRJVmCIHUQbzJy2a6abmPOUzs5AhDW3hCr6ylJFpr_&_nc_zt=23&_nc_ht=scontent.fbkk22-4.fna&_nc_gid=AAmXY3gbddcFmqFPdA5dh9G&oh=00_AYBLjzq9msYcQvl9yb7hxmCP6KMUaGktSEVPukMETlELmw&oe=67B784AB" alt="BackGroud logo" width="200" class="center">
+            <p>✨ หาหอพักไม่ต้องลำพัง! PARENT ช่วยได้! ✨</p>
+            <p>แต่ ๆ ๆ ๆ น้อง ๆ และผู้ปกครอง </p>
+            <p>📍 ไม่อยากปวดหัวกับการหาหอพัก? </p>
+            <p>📍 ทักไปแล้วเจ้าของหอไม่ตอบ? (ขอไปอาบน้ำก่อนนะ 🛁💦) </p>
+            <p>📍 อยากเห็นหอจริง ๆ ก่อนตัดสินใจ? </p>
+            <p>💡 PARENT ช่วยได้! </p>
+            <p>✅ มี หอพักพร้อมให้บริการ หลากหลาย</p>
+            <p>✅ มี มาตรฐานจริง พร้อม คลิปวิดีโอรีวิว</p>
+            <p>✅ แอดมินตอบไว 24 ชั่วโมง ไม่ต้องรอ!</p>
+            <p>📲 ติดตามเราได้ที่ 👉 Line OA : @phalen 💙✨</p>
+            <p>👇 หรือ กดปุ่มด้านล่างเลย 👇</p>
+            <div class="platform-icon">
+                <img src="https://scontent.fbkk22-6.fna.fbcdn.net/v/t39.30808-6/473559159_122206629884222157_4351608569512660390_n.jpg?stp=dst-jpg_s600x600_tt6&_nc_cat=102&ccb=1-7&_nc_sid=833d8c&_nc_eui2=AeHC-mQ_Xdu0XD6AWdLmGZtZt5Ax1BNpZIi3kDHUE2lkiAMxezB46DOopLcRWZEDAycFX1yOjAuOsQYNmwCJS8Bd&_nc_ohc=pHMpD8YMFS0Q7kNvgEu8fz8&_nc_oc=AdhdDokEpwCQMdKthkfzBnQFu1NzCdh3mvA_8d639DXNznmsG0A4LOW2BMe3pDKWHobV0mgfX-YlOYCbgG6sUaoI&_nc_zt=23&_nc_ht=scontent.fbkk22-6.fna&_nc_gid=AssFU1Y-ZLPm-QoCPUVLhAJ&oh=00_AYCaBLn86gi8FeoQ6f4lNxknaGOMC5WRQFDNEdK8OsJXLg&oe=67B79B9C" alt="BackGroud logo" width="auto" class="center">
             </div>
             <a href="https://line.me/R/ti/p/@931wdfcb" target="_blank" class="link">ไปที่ LINE OA</a>
         </div>
@@ -222,16 +227,16 @@
         <div class="social-card">
             <div class="platform-icon">
                 <img src="https://img.freepik.com/premium-vector/art-illustration_929495-41.jpg?ga=GA1.1.956909177.1739519484&semt=ais_hybrid" alt="Facebook Logo" class="logo">
-                <h2>PARENT</h2>
+                <h2>Facebook : PARENT</h2>
             </div>
-            <p class="name">Facebook</p>
+            <p>🔥 อัปเดตโปรโมชั่น & กิจกรรมสุดพิเศษ กับ PARENT ได้ที่นี่! 🔥</p>
+            <p>📢 ดีลเด็ด กิจกรรมโดน อัปเดตก่อนใคร!</p>
+            <p>🏡 หาหอพักง่าย ๆ พร้อมโปรสุดคุ้ม</p>
+            <p>💬 สิทธิพิเศษเฉพาะสมาชิก ห้ามพลาด!</p>
+            <p>📲 ติดตามเราได้ที่ 👉 Facebook : PARENT 💙✨</p>
+            <p>👇 หรือ กดปุ่มด้านล่างเลย 👇</p>
             <div class="embedded-content">
-                <iframe src="https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fwww.facebook.com%2Fpermalink.php%3Fstory_fbid%3Dpfbid037LtiCKFpww4GEogh6JTd7ajxqHYvShTAKewR3VwZNR4ATNwSk84RXo5Fc7is4NHhl%26id%3D61556664716206&show_text=true&width=500" 
-                    class="fb-iframe"
-                    scrolling="no" 
-                    allowfullscreen="true" 
-                    allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share">
-                </iframe>
+                <iframe src="https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fwww.facebook.com%2Fpermalink.php%3Fstory_fbid%3Dpfbid02vLT8dDzfDY6wKkXL4odc8nuJheCW7Q4g69MFfdncNdWojBR6PRCubM7CQGHwrZAcl%26id%3D61556664716206&show_text=true&width=500" width="500" height="684" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowfullscreen="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"></iframe>
             </div>
             <a href="https://www.facebook.com/profile.php?id=61556664716206" target="_blank" class="link">ไปที่ Facebook</a>
         </div>
@@ -240,9 +245,14 @@
         <div class="social-card">
             <div class="platform-icon">
                 <img src="https://img.freepik.com/premium-vector/icon-design-fundamentals-crafting-perfect-vector-art-illustrations_1301270-3860.jpg?ga=GA1.1.956909177.1739519484&semt=ais_hybrid" alt="TikTok Logo" class="logo">
-                <h2>parent.room</h2>
+                <h2 class="name">TikTok : parent.room</h2>
             </div>
-            <p class="name">TikTok</p>
+            <p>📢 อัปเดตหอพักแบบเรียล ๆ ด้วยคลิปวิดีโอ! 🎥✨</p>
+            <p>🏡 รีวิวหอพักจริง! ดูก่อน ตัดสินใจง่าย 📌</p>
+            <p>🎬 วิดีโอชาเลนจ์ & ทริกเด็ด สำหรับชีวิตเด็กหอ 🤩</p>
+            <p>🔴 LIVE สด ปรึกษาปัญหาหอพักแบบเรียลไทม์! 💬</p>        
+            <p>📲 ติดตามเราได้ที่ PARENT! 💙🏠</p>
+            <p>👇 หรือ กดปุ่มด้านล่างเลย 👇</p>
             <div class="embedded-content">
                 <blockquote class="tiktok-embed" 
                     cite="https://www.tiktok.com/@parent.room/video/7466280434284924168" 
