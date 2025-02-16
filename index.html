@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Social Media Links & Previews</title>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --facebook-color: #1877f2;
+            --tiktok-color: #000000;
+            --line-color: #06C755;
+            --transition-speed: 0.3s;
+            --card-padding: 24px;
+            --card-radius: 16px;
+        }
+
+        body {
+            background-color: #f0f2f5;
+            margin: 0;
+            padding: 0;
+            font-family: 'Kanit', Arial, sans-serif;
+            line-height: 1.6;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            padding: 32px;
+            max-width: 800px;
+            margin: 20px auto;
+        }
+
+        .social-card {
+            border: none;
+            border-radius: var(--card-radius);
+            padding: var(--card-padding);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            background-color: #fff;
+            transition: transform var(--transition-speed), box-shadow var(--transition-speed);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .social-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+        }
+
+        .logo {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            margin-bottom: 16px;
+            object-fit: cover;
+        }
+
+        h2 {
+            font-size: 24px;
+            color: #1a1a1a;
+            margin: 12px 0;
+            font-weight: 600;
+        }
+
+        .name {
+            font-size: 18px;
+            color: #666;
+            margin: 8px 0;
+        }
+
+        .embedded-content {
+            width: 100%;
+            margin: 20px 0;
+            border-radius: var(--card-radius);
+            overflow: hidden;
+            background-color: #f8f9fa;
+            padding: 16px;
+        }
+
+        .embedded-content iframe {
+            width: 100%;
+            border: none;
+            border-radius: 8px;
+            margin: 0;
+        }
+
+        .fb-iframe {
+            min-height: 500px;
+        }
+
+        .tiktok-embed {
+            margin: 0 auto !important;
+            border-radius: 8px;
+        }
+
+        .link {
+            display: inline-block;
+            padding: 12px 24px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 500;
+            margin-top: 16px;
+            transition: all var(--transition-speed);
+            width: calc(100% - 48px);
+            text-align: center;
+            cursor: pointer;
+        }
+
+        .social-card:nth-child(1) .link {
+            background-color: var(--line-color);
+            color: white;
+        }
+
+        .social-card:nth-child(2) .link {
+            background-color: var(--facebook-color);
+            color: white;
+        }
+
+        .social-card:nth-child(3) .link {
+            background-color: var(--tiktok-color);
+            color: white;
+        }
+
+        .link:hover {
+            opacity: 0.9;
+            transform: scale(1.02);
+        }
+
+        .platform-icon {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .social-card {
+            animation: fadeInUp 0.5s ease-out forwards;
+        }
+
+        .center {
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            text-align: center;
+        }
+
+        .social-card:nth-child(1) { animation-delay: 0.1s; }
+        .social-card:nth-child(2) { animation-delay: 0.2s; }
+        .social-card:nth-child(3) { animation-delay: 0.3s; }
+
+        @media (max-width: 600px) {
+            :root {
+                --card-padding: 16px;
+            }
+
+            .container {
+                padding: 16px;
+            }
+            
+            h2 {
+                font-size: 20px;
+            }
+            
+            .name {
+                font-size: 16px;
+            }
+            
+            .link {
+                padding: 10px 20px;
+            }
+
+            .embedded-content {
+                padding: 12px;
+            }
+
+            .fb-iframe {
+                min-height: 400px;
+            }
+
+            .platform-icon {
+                gap: 12px;
+            }
+        }
+    </style>
+</head>
+
+<div class="social-card">
+    <div class="platform-icon">
+        <img src="https://scontent.fbkk29-4.fna.fbcdn.net/v/t39.30808-6/475892757_122210589758222157_5782840008004931319_n.jpg?_nc_cat=111&ccb=1-7&_nc_sid=a5f93a&_nc_eui2=AeHOpeZEkzRs4o6XaOy-WAYfEwrXKQ-bDa0TCtcpD5sNrbGjbYIZCW8fpr0I2ffBuTaIb5F6F9K9XQ_3nvSMh-ki&_nc_ohc=KmwwdvM04B8Q7kNvgFmnmMh&_nc_oc=AdgdmQxZTcd1zCxbt91yN5_KNdxZKkmBW3iFkux8IE_e2K3pteoiJMETCgrL0IVGLng&_nc_zt=23&_nc_ht=scontent.fbkk29-4.fna&_nc_gid=AV3YFuLj6Evn5WR1m2nJZAz&oh=00_AYCwRgbLoWmClqHutYAa40sLGjkVj-rIThYx1iIYMZIMOw&oe=67B4E466" alt="PARENT logo" width="200" class="center">
+    </div>
+<h1 class="center">PARENT Socia Media</h1>
+</div>
+
+<body>
+    <div class="container">
+        <!-- LINE OA Section -->
+        <div class="social-card">
+            <div class="platform-icon">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/41/LINE_logo.svg/320px-LINE_logo.svg.png" alt="LINE OA Logo" class="logo">
+                <h2>PARENT</h2>
+            </div>
+            <p class="name">@phalen</p>
+            <a href="https://line.me/R/ti/p/@931wdfcb" target="_blank" class="link">ไปที่ LINE OA</a>
+        </div>
+        
+        <!-- Facebook Section -->
+        <div class="social-card">
+            <div class="platform-icon">
+                <img src="https://img.freepik.com/premium-vector/art-illustration_929495-41.jpg?ga=GA1.1.956909177.1739519484&semt=ais_hybrid" alt="Facebook Logo" class="logo">
+                <h2>PARENT</h2>
+            </div>
+            <p class="name">Facebook</p>
+            <div class="embedded-content">
+                <iframe src="https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fwww.facebook.com%2Fpermalink.php%3Fstory_fbid%3Dpfbid037LtiCKFpww4GEogh6JTd7ajxqHYvShTAKewR3VwZNR4ATNwSk84RXo5Fc7is4NHhl%26id%3D61556664716206&show_text=true&width=500" 
+                    class="fb-iframe"
+                    scrolling="no" 
+                    allowfullscreen="true" 
+                    allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share">
+                </iframe>
+            </div>
+            <a href="https://www.facebook.com/profile.php?id=61556664716206" target="_blank" class="link">ไปที่ Facebook</a>
+        </div>
+       
+        <!-- TikTok Section -->
+        <div class="social-card">
+            <div class="platform-icon">
+                <img src="https://img.freepik.com/premium-vector/icon-design-fundamentals-crafting-perfect-vector-art-illustrations_1301270-3860.jpg?ga=GA1.1.956909177.1739519484&semt=ais_hybrid" alt="TikTok Logo" class="logo">
+                <h2>parent.room</h2>
+            </div>
+            <p class="name">TikTok</p>
+            <div class="embedded-content">
+                <blockquote class="tiktok-embed" 
+                    cite="https://www.tiktok.com/@parent.room/video/7466280434284924168" 
+                    data-video-id="7466280434284924168"> 
+                    <section> 
+                        <a target="_blank" title="@parent.room" href="https://www.tiktok.com/@parent.room?refer=embed">@parent.room</a> 
+                        หอพักบ้านทอง ร้านอาหาร ร้านชิล ร้านสะดวกซื้อพร้อมๆ ลุยๆ ร้านตัดผม ติดรถไฟฟ้า 
+                        <a title="นักศึกษา" target="_blank" href="https://www.tiktok.com/tag/%E0%B8%99%E0%B8%B1%E0%B8%81%E0%B8%A8%E0%B8%B6%E0%B8%81%E0%B8%A9%E0%B8%B2?refer=embed">#นักศึกษา</a> 
+                        <a title="fyp" target="_blank" href="https://www.tiktok.com/tag/fyp?refer=embed">#fyp</a> 
+                    </section> 
+                </blockquote>
+            </div>
+            <a href="https://www.tiktok.com/@parent.room" target="_blank" class="link">ไปที่ TikTok</a>
+        </div>
+    </div>
+
+    <!-- TikTok Embed Script -->
+    <script async src="https://www.tiktok.com/embed.js"></script>
+</body>
+</html>
