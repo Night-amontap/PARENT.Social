@@ -272,6 +272,7 @@
             <button onclick="goBack()" class="back-button">
                 <i class="fas fa-arrow-left"></i> ย้อนกลับ
             </button>
+            <!-- แก้ไขที่นี่: รูปภาพโลโก้ -->
             <img src="https://scontent.fbkk29-4.fna.fbcdn.net/v/t39.30808-6/475892757_122210589758222157_5782840008004931319_n.jpg?_nc_cat=111&ccb=1-7&_nc_sid=a5f93a&_nc_eui2=AeHOpeZEkzRs4o6XaOy-WAYfEwrXKQ-bDa0TCtcpD5sNrbGjbYIZCW8fpr0I2ffBuTaIb5F6F9K9XQ_3nvSMh-ki&_nc_ohc=KmwwdvM04B8Q7kNvgFmnmMh&_nc_oc=AdgdmQxZTcd1zCxbt91yN5_KNdxZKkmBW3iFkux8IE_e2K3pteoiJMETCgrL0IVGLng&_nc_zt=23&_nc_ht=scontent.fbkk29-4.fna&_nc_gid=AV3YFuLj6Evn5WR1m2nJZAz&oh=00_AYCwRgbLoWmClqHutYAa40sLGjkVj-rIThYx1iIYMZIMOw&oe=67B4E466" alt="Logo" width="200" class="center">
             <h1>ระบบจองห้องพัก</h1>
         </div>
@@ -319,6 +320,41 @@
             }
         };
 
+        // คุณสามารถเพิ่มออบเจกต์เพื่อเก็บรูปภาพสำหรับอาคาร ชั้น และห้องต่างๆ ได้ที่นี่
+        // ตัวอย่าง:
+        const buildingImages = {
+            "A": "https://images.adsttc.com/media/images/6636/c29f/c734/945c/42c2/96ed/newsletter/architecture-as-a-product-what-makes-a-building-worth-repeating_1.jpg?1714864858",
+            "B": "https://t3.ftcdn.net/jpg/00/52/14/94/360_F_52149432_4FhRgWtKJQFCM299StO3te3zwXF5KAfE.jpg",
+            "C": "https://images.pexels.com/photos/323705/pexels-photo-323705.jpeg?cs=srgb&dl=pexels-expect-best-79873-323705.jpg&fm=jpg"
+        };
+
+        const floorImages = {
+            "A1": "https://i.pinimg.com/736x/8c/c4/42/8cc442be192a4ec86bd32c2246a52782.jpg",
+            "A2": "https://i.pinimg.com/736x/18/29/e1/1829e14b0e169a908ac9edd84de9d581.jpg",
+            "A3": "https://i.pinimg.com/736x/a3/78/c6/a378c69e902b72c0388cd9a62941d476.jpg",
+            "B1": "https://i.pinimg.com/736x/8c/c4/42/8cc442be192a4ec86bd32c2246a52782.jpg",
+            "B2": "https://i.pinimg.com/736x/18/29/e1/1829e14b0e169a908ac9edd84de9d581.jpg",
+            "C1": "https://i.pinimg.com/736x/a3/78/c6/a378c69e902b72c0388cd9a62941d476.jpg",
+            "C2": "https://i.pinimg.com/736x/8c/c4/42/8cc442be192a4ec86bd32c2246a52782.jpg"
+        };
+
+        const roomImages = {
+            "A1101": "https://i.pinimg.com/736x/f5/a9/24/f5a924caec914ff546e809bc4a785285.jpg",
+            "A1102": "https://i.pinimg.com/736x/80/7e/83/807e83b0b2d25c447811cb3771f36d69.jpg",
+            "A2201": "https://i.pinimg.com/236x/bf/0b/49/bf0b49a2ca9a986ded94f74dbb418231.jpg",
+            // เพิ่มรูปภาพสำหรับห้องอื่นๆ ตามต้องการ
+        };
+
+        const roomData = {
+            "A1101": { price: 3500, status: "unavailable" },
+            "A1102": { price: 4000, status: "unavailable" },
+            "A2201": { price: 4500, status: "available" },
+            "A2202": { price: 3800, status: "maintenance" },
+            "B1101": { price: 3200, status: "available" },
+            "B1102": { price: 3900, status: "unavailable" },
+            // เพิ่มข้อมูลห้องอื่นๆ ตามต้องการ
+        };
+
         let currentPath = [];
         let map = null;
         
@@ -355,14 +391,22 @@
             const detailContainer = document.getElementById("roomDetailContainer");
             detailContainer.classList.remove("hidden");
 
+            // Get room data
+            const roomKey = building + floor + room;
+            const roomInfo = roomData[roomKey] || { price: 4400, status: 'available' };
+            const statusDisplay = getRoomStatusDisplay(roomInfo.status);
+            
+            // Get room image
+            const roomImageSrc = roomImages[roomKey] || "https://www.lh.co.th/_next/image?url=https%3A%2F%2Flh-assets.lh.co.th%2Fimages%2Foriginal%2Fprojects%2F94c66f67-f6c5-4ecb-9337-99d72ca58b38%2Fprojects-language%2F6e3ed7a6-e962-414e-861d-5d054e1293aa%2Fthai%2Fpage-setting%2Fd9da708a-59ed-4422-b001-4150370287d5%2F3b5211c7-5d78-4185-b542-8e0daa474026.jpeg&w=3840&q=75";
+
             detailContainer.innerHTML = `
                 <div class="room-detail">
                     <div class="room-detail-grid">
                         <div>
-                            <img src="https://www.lh.co.th/_next/image?url=https%3A%2F%2Flh-assets.lh.co.th%2Fimages%2Foriginal%2Fprojects%2F94c66f67-f6c5-4ecb-9337-99d72ca58b38%2Fprojects-language%2F6e3ed7a6-e962-414e-861d-5d054e1293aa%2Fthai%2Fpage-setting%2Fd9da708a-59ed-4422-b001-4150370287d5%2F3b5211c7-5d78-4185-b542-8e0daa474026.jpeg&w=3840&q=75" alt="Room Main Image" style="width: 100%; border-radius: 8px;">
+                            <img src="${roomImageSrc}" alt="Room Main Image" style="width: 100%; border-radius: 8px;">
                             <div class="room-images">
                                 ${Array(6).fill(0).map((_, i) => `
-                                    <img src="https://www.lh.co.th/_next/image?url=https%3A%2F%2Flh-assets.lh.co.th%2Fimages%2Foriginal%2Fprojects%2F94c66f67-f6c5-4ecb-9337-99d72ca58b38%2Fprojects-language%2F6e3ed7a6-e962-414e-861d-5d054e1293aa%2Fthai%2Fpage-setting%2Fd9da708a-59ed-4422-b001-4150370287d5%2F3b5211c7-5d78-4185-b542-8e0daa474026.jpeg&w=3840&q=75" alt="Room Image ${i + 1}" onclick="showImage(this.src)">
+                                    <img src="${roomImageSrc}" alt="Room Image ${i + 1}" onclick="showImage(this.src)">
                                 `).join('')}
                             </div>
                             <video class="room-video" controls>
@@ -372,7 +416,10 @@
                         </div>
                         <div class="room-info">
                             <h2>ห้อง ${room}</h2>
-                            <div class="price">฿4,400.00 / เดือน</div>
+                            <div class="price">฿${roomInfo.price.toLocaleString()} / เดือน</div>
+                            <div class="status" style="color: ${statusDisplay.color}; margin: 10px 0; font-weight: 500;">
+                                สถานะ: ${statusDisplay.text}
+                            </div>
                             <p>ห้องพักขนาด 28 ตารางเมตร พร้อมเฟอร์นิเจอร์และเครื่องใช้ไฟฟ้าครบครัน</p>
                             <div class="room-features">
                                 ${roomDetails.features.map(feature => `
@@ -382,11 +429,19 @@
                                     </div>
                                 `).join('')}
                             </div>
-                            <button onclick="alert('ระบบจองห้องพักจะเปิดให้บริการเร็วๆ นี้')" 
-                                    style="background: #2196f3; color: white; border: none; padding: 12px 30px; 
-                                           border-radius: 8px; cursor: pointer; font-family: 'Prompt', sans-serif;">
-                                จองห้องพัก
-                            </button>
+                            ${roomInfo.status === 'available' ? `
+                                <button onclick="alert('ระบบจองห้องพักจะเปิดให้บริการเร็วๆ นี้')" 
+                                        style="background: #2196f3; color: white; border: none; padding: 12px 30px; 
+                                            border-radius: 8px; cursor: pointer; font-family: 'Prompt', sans-serif; 
+                                            margin-top: 15px;">
+                                    จองห้องพัก
+                                </button>
+                            ` : `
+                                <div style="background: ${statusDisplay.color}; color: white; padding: 12px 30px; 
+                                        border-radius: 8px; margin-top: 15px; text-align: center;">
+                                    ${statusDisplay.text}
+                                </div>
+                            `}
                             <div id="map" class="map-container"></div>
                         </div>
                     </div>
@@ -409,10 +464,6 @@
             modalImg.src = src;
         }
 
-        function closeModal() {
-            document.getElementById("imageModal").style.display = "none";
-        }
-
         // Previous functions updated to include room detail view
         function showRooms(building, floor) {
             document.getElementById("floorContainer").classList.add("hidden");
@@ -424,10 +475,15 @@
             let key = building + floor;
             rooms[key].forEach(room => {
                 const isAvailable = Math.random() > 0.3;
+                // สร้าง key สำหรับดึงรูปภาพห้อง
+                const roomKey = building + floor + room;
+                const roomImageSrc = roomImages[roomKey] || "https://www.lh.co.th/_next/image?url=https%3A%2F%2Flh-assets.lh.co.th%2Fimages%2Foriginal%2Fprojects%2F94c66f67-f6c5-4ecb-9337-99d72ca58b38%2Fprojects-language%2F6e3ed7a6-e962-414e-861d-5d054e1293aa%2Fthai%2Fpage-setting%2Fd9da708a-59ed-4422-b001-4150370287d5%2F3b5211c7-5d78-4185-b542-8e0daa474026.jpeg&w=3840&q=75";
+                
                 let card = document.createElement("div");
                 card.className = "card";
                 card.innerHTML = `
-                    <img src="https://www.lh.co.th/_next/image?url=https%3A%2F%2Flh-assets.lh.co.th%2Fimages%2Foriginal%2Fprojects%2F94c66f67-f6c5-4ecb-9337-99d72ca58b38%2Fprojects-language%2F6e3ed7a6-e962-414e-861d-5d054e1293aa%2Fthai%2Fpage-setting%2Fd9da708a-59ed-4422-b001-4150370287d5%2F3b5211c7-5d78-4185-b542-8e0daa474026.jpeg&w=3840&q=75" alt="ห้อง ${room}">
+                    <!-- แก้ไขที่นี่: รูปภาพห้อง -->
+                    <img src="${roomImageSrc}" alt="ห้อง ${room}">
                     <div class="status-badge">${isAvailable ? 'ว่าง' : 'ไม่ว่าง'}</div>
                     <div class="card-content">
                         <h3>ห้อง ${room}</h3>
@@ -464,10 +520,14 @@
             document.getElementById("roomDetailContainer").classList.add("hidden");
 
             buildings.forEach(building => {
+                // ใช้รูปภาพจาก buildingImages ถ้ามี หรือใช้รูปภาพเริ่มต้น
+                const imageSrc = buildingImages[building] || "https://www.lh.co.th/_next/image?url=https%3A%2F%2Flh-assets.lh.co.th%2Fimages%2Foriginal%2Fprojects%2F94c66f67-f6c5-4ecb-9337-99d72ca58b38%2Fprojects-language%2F6e3ed7a6-e962-414e-861d-5d054e1293aa%2Fthai%2Fpage-setting%2Fd9da708a-59ed-4422-b001-4150370287d5%2F3b5211c7-5d78-4185-b542-8e0daa474026.jpeg&w=3840&q=75";
+                
                 let card = document.createElement("div");
                 card.className = "card";
                 card.innerHTML = `
-                    <img src="https://www.lh.co.th/_next/image?url=https%3A%2F%2Flh-assets.lh.co.th%2Fimages%2Foriginal%2Fprojects%2F94c66f67-f6c5-4ecb-9337-99d72ca58b38%2Fprojects-language%2F6e3ed7a6-e962-414e-861d-5d054e1293aa%2Fthai%2Fpage-setting%2Fd9da708a-59ed-4422-b001-4150370287d5%2F3b5211c7-5d78-4185-b542-8e0daa474026.jpeg&w=3840&q=75" alt="ตึก ${building}">
+                    <!-- แก้ไขที่นี่: รูปภาพตึก -->
+                    <img src="${imageSrc}" alt="ตึก ${building}">
                     <div class="card-content">
                         <h3>ตึก ${building}</h3>
                         <p>${floors[building].length} ชั้น</p>
@@ -491,10 +551,15 @@
             container.classList.remove("hidden");
 
             floors[building].forEach(floor => {
+                // สร้าง key สำหรับดึงรูปภาพชั้น
+                const floorKey = building + floor;
+                const floorImageSrc = floorImages[floorKey] || "https://www.lh.co.th/_next/image?url=https%3A%2F%2Flh-assets.lh.co.th%2Fimages%2Foriginal%2Fprojects%2F94c66f67-f6c5-4ecb-9337-99d72ca58b38%2Fprojects-language%2F6e3ed7a6-e962-414e-861d-5d054e1293aa%2Fthai%2Fpage-setting%2Fd9da708a-59ed-4422-b001-4150370287d5%2F3b5211c7-5d78-4185-b542-8e0daa474026.jpeg&w=3840&q=75";
+                
                 let card = document.createElement("div");
                 card.className = "card";
                 card.innerHTML = `
-                    <img src="https://www.lh.co.th/_next/image?url=https%3A%2F%2Flh-assets.lh.co.th%2Fimages%2Foriginal%2Fprojects%2F94c66f67-f6c5-4ecb-9337-99d72ca58b38%2Fprojects-language%2F6e3ed7a6-e962-414e-861d-5d054e1293aa%2Fthai%2Fpage-setting%2Fd9da708a-59ed-4422-b001-4150370287d5%2F3b5211c7-5d78-4185-b542-8e0daa474026.jpeg&w=3840&q=75" alt="ชั้น ${floor}">
+                    <!-- แก้ไขที่นี่: รูปภาพชั้น -->
+                    <img src="${floorImageSrc}" alt="ชั้น ${floor}">
                     <div class="card-content">
                         <h3>ชั้น ${floor}</h3>
                         <p>${rooms[building + floor].length} ห้อง</p>
@@ -506,6 +571,57 @@
                     updateBreadcrumb();
                     showBackButton();
                 };
+                container.appendChild(card);
+            });
+        }
+
+        function getRoomStatusDisplay(status) {
+            const statusMap = {
+                'available': { text: 'ว่าง', color: '#4CAF50' },
+                'unavailable': { text: 'ไม่ว่าง', color: '#f44336' },
+                'maintenance': { text: 'ปิดปรับปรุง', color: '#FF9800' }
+            };
+            return statusMap[status] || { text: 'ไม่ทราบสถานะ', color: '#9E9E9E' };
+        }
+
+        function showRooms(building, floor) {
+            document.getElementById("floorContainer").classList.add("hidden");
+            document.getElementById("roomDetailContainer").classList.add("hidden");
+            let container = document.getElementById("roomContainer");
+            container.innerHTML = "";
+            container.classList.remove("hidden");
+
+            let key = building + floor;
+            rooms[key].forEach(room => {
+                const roomKey = building + floor + room;
+                const roomInfo = roomData[roomKey] || { price: 4400, status: 'available' };
+                const statusDisplay = getRoomStatusDisplay(roomInfo.status);
+                const roomImageSrc = roomImages[roomKey] || "default-room-image.jpg";
+                
+                let card = document.createElement("div");
+                card.className = "card";
+                card.innerHTML = `
+                    <img src="${roomImageSrc}" alt="ห้อง ${room}">
+                    <div class="status-badge" style="background-color: ${statusDisplay.color}">
+                        ${statusDisplay.text}
+                    </div>
+                    <div class="card-content">
+                        <h3>ห้อง ${room}</h3>
+                        <div class="price">฿${roomInfo.price.toLocaleString()} / เดือน</div>
+                        <button onclick="event.stopPropagation(); showRoomDetail('${building}', '${floor}', '${room}')" 
+                                style="margin-top: 15px; background: #1a237e; color: white; border: none; 
+                                    padding: 8px 20px; border-radius: 6px; cursor: pointer; font-family: 'Prompt', sans-serif;">
+                            ดูรายละเอียด
+                        </button>
+                        ${roomInfo.status === 'available' ? `
+                            <button onclick="event.stopPropagation(); alert('ระบบจองห้องพักจะเปิดให้บริการเร็วๆ นี้')" 
+                                    style="margin-top: 10px; background: #2196f3; color: white; border: none; 
+                                        padding: 8px 20px; border-radius: 6px; cursor: pointer; font-family: 'Prompt', sans-serif;">
+                                จองห้องพัก
+                            </button>
+                        ` : ''}
+                    </div>
+                `;
                 container.appendChild(card);
             });
         }
@@ -526,6 +642,10 @@
             if (event.target == modal) {
                 closeModal();
             }
+        }
+
+        function closeModal() {
+            document.getElementById("imageModal").style.display = "none";
         }
 
         showBuildings();
