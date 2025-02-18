@@ -6,7 +6,6 @@
     <title>ระบบจองห้องพัก</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.css" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600&display=swap');
 
@@ -36,6 +35,12 @@
             margin: 0;
             padding: 20px 0;
             font-weight: 600;
+        }
+        
+        .header img {
+            max-width: 200px;
+            height: auto;
+            margin-bottom: 15px;
         }
 
         .breadcrumb {
@@ -127,6 +132,21 @@
             display: none;
         }
 
+        .tiktok-embed-container {
+            width: 100%;
+            max-width: 605px;
+            margin: 20px auto;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .tiktok-embed-container iframe {
+            border-radius: 8px !important;
+            width: 100% !important;
+            min-width: 325px !important;
+        }
+
         /* Room Detail Styles */
         .room-detail {
             background: white;
@@ -155,12 +175,6 @@
             object-fit: cover;
             border-radius: 8px;
             cursor: pointer;
-        }
-
-        .room-video {
-            width: 100%;
-            border-radius: 8px;
-            margin: 20px 0;
         }
 
         .room-info {
@@ -234,10 +248,6 @@
             outline: none;
         }
 
-        .search-bar input {
-                font-size: 0.875rem;
-            }
-
         .link {
             display: inline-block;
             padding: 12px 24px;
@@ -245,10 +255,16 @@
             text-decoration: none;
             font-weight: 500;
             margin-top: 16px;
-            transition: all var(--transition-speed);
+            transition: all 0.3s ease;
             width: calc(100% - 48px);
             text-align: center;
             cursor: pointer;
+            background-color: #1a237e;
+            color: white;
+        }
+        
+        .link:hover {
+            background-color: #283593;
         }
 
         @media (max-width: 768px) {
@@ -264,7 +280,96 @@
                 grid-template-columns: 1fr;
             }
         }
+
+        .map-container {
+            height: 300px;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-top: 20px;
+            position: relative;
+        }
+
+        .leaflet-popup-content {
+            font-family: 'Prompt', sans-serif !important;
+        }
+
+        .leaflet-popup-content b {
+            color: #1a237e;
+        }
+
+        .leaflet-control-attribution {
+            font-size: 0.8em !important;
+        }
+
+        .room-images {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .room-images img {
+            height: 100px;
+            object-fit: cover;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .room-images img:hover {
+            transform: scale(1.05);
+            border-color: #2196f3;
+        }
+
+        .room-images .active-thumbnail {
+            border-color: #2196f3;
+            box-shadow: 0 4px 8px rgba(33, 150, 243, 0.3);
+        }
+
+        .no-image {
+            background: #f5f5f5;
+            height: 300px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #666;
+        }
+
+        .modal-content {
+            position: relative;
+            max-width: 90%;
+            max-height: 90%;
+        }
+
+        .nav-button {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0,0,0,0.5);
+            color: white;
+            border: none;
+            padding: 15px;
+            cursor: pointer;
+            font-size: 24px;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+
+        .nav-button:hover {
+            background: rgba(0,0,0,0.8);
+        }
+
+        .prev {
+            left: 20px;
+        }
+
+        .next {
+            right: 20px;
+        }
+
     </style>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body>
     <div class="container">
@@ -272,15 +377,12 @@
             <button onclick="goBack()" class="back-button">
                 <i class="fas fa-arrow-left"></i> ย้อนกลับ
             </button>
-            <!-- แก้ไขที่นี่: รูปภาพโลโก้ -->
-            <img src="https://scontent.fbkk29-4.fna.fbcdn.net/v/t39.30808-6/475892757_122210589758222157_5782840008004931319_n.jpg?_nc_cat=111&ccb=1-7&_nc_sid=a5f93a&_nc_eui2=AeHOpeZEkzRs4o6XaOy-WAYfEwrXKQ-bDa0TCtcpD5sNrbGjbYIZCW8fpr0I2ffBuTaIb5F6F9K9XQ_3nvSMh-ki&_nc_ohc=KmwwdvM04B8Q7kNvgFmnmMh&_nc_oc=AdgdmQxZTcd1zCxbt91yN5_KNdxZKkmBW3iFkux8IE_e2K3pteoiJMETCgrL0IVGLng&_nc_zt=23&_nc_ht=scontent.fbkk29-4.fna&_nc_gid=AV3YFuLj6Evn5WR1m2nJZAz&oh=00_AYCwRgbLoWmClqHutYAa40sLGjkVj-rIThYx1iIYMZIMOw&oe=67B4E466" alt="Logo" width="200" class="center">
+            <img class="card" src="https://scontent.fbkk22-3.fna.fbcdn.net/v/t39.30808-6/477593979_122213247752222157_177808568739638754_n.jpg?_nc_cat=110&ccb=1-7&_nc_sid=6ee11a&_nc_eui2=AeFUCJCE7sLzC8D75EHjINWFiMKwwdl4huKIwrDB2XiG4mXfVZR-J2wydEzvDb8TJeE9R1l8DKY_1IPzS9HYmMEw&_nc_ohc=tCTcitnYjHAQ7kNvgE_emlg&_nc_oc=Adh4G2V35Cd994LJRGnBetMJnWId3f2P7PaFwJQ26s0agszznTGr9LtMoTEvtB3PqJV1uOGtsMB_iKLJTQ241_0E&_nc_zt=23&_nc_ht=scontent.fbkk22-3.fna&_nc_gid=Aifu8RwWNCeEUnWgHiSfMLJ&oh=00_AYBAthMfknysGcfDb1zvyJjB8k7mUc4uWFHsI0uiTmr1sw&oe=67BAC429" alt="Logo">
             <h1>ระบบจองห้องพัก</h1>
         </div>
-
-        <div class="search-bar">
-            <input type="text" id="searchInput" placeholder="ค้นหาตึก..." oninput="filterBuildings()">
-        </div>
-
+            <div class="search-bar">
+                <input type="text" id="searchInput" placeholder="ค้นหาตึก..." oninput="filterBuildings()">
+            </div>
         <div class="breadcrumb" id="breadcrumb"></div>
         <div class="grid" id="buildingContainer"></div>
         <div class="grid hidden" id="floorContainer"></div>
@@ -290,11 +392,14 @@
 
     <div class="modal" id="imageModal">
         <span class="close-modal" onclick="closeModal()">&times;</span>
+        <button class="nav-button prev" onclick="navigateImage(-1)">❮</button>
+        <button class="nav-button next" onclick="navigateImage(1)">❯</button>
         <div class="modal-content">
             <img id="modalImage" src="" alt="Room Image">
         </div>
     </div>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.js"></script>
     <script>
         const buildings = ["A", "B", "C"];
         const floors = { "A": ["1", "2", "3"], "B": ["1", "2"], "C": ["1", "2"] };
@@ -304,7 +409,6 @@
             "C1": ["101", "102"], "C2": ["201", "202"]
         };
 
-        // Room details data
         const roomDetails = {
             features: [
                 { icon: "fas fa-bed", text: "เตียงขนาด 6 ฟุต" },
@@ -320,39 +424,83 @@
             }
         };
 
-        // คุณสามารถเพิ่มออบเจกต์เพื่อเก็บรูปภาพสำหรับอาคาร ชั้น และห้องต่างๆ ได้ที่นี่
-        // ตัวอย่าง:
         const buildingImages = {
-            "A": "https://images.adsttc.com/media/images/6636/c29f/c734/945c/42c2/96ed/newsletter/architecture-as-a-product-what-makes-a-building-worth-repeating_1.jpg?1714864858",
-            "B": "https://t3.ftcdn.net/jpg/00/52/14/94/360_F_52149432_4FhRgWtKJQFCM299StO3te3zwXF5KAfE.jpg",
-            "C": "https://images.pexels.com/photos/323705/pexels-photo-323705.jpeg?cs=srgb&dl=pexels-expect-best-79873-323705.jpg&fm=jpg"
+            "A": "https://i.pinimg.com/736x/50/c5/d6/50c5d68cad37e7d490d6a3f6e5432ee0.jpg",
+            "B": "https://i.pinimg.com/736x/50/c5/d6/50c5d68cad37e7d490d6a3f6e5432ee0.jpg",
+            "C": "https://i.pinimg.com/736x/50/c5/d6/50c5d68cad37e7d490d6a3f6e5432ee0.jpg"
         };
 
         const floorImages = {
-            "A1": "https://i.pinimg.com/736x/8c/c4/42/8cc442be192a4ec86bd32c2246a52782.jpg",
-            "A2": "https://i.pinimg.com/736x/18/29/e1/1829e14b0e169a908ac9edd84de9d581.jpg",
-            "A3": "https://i.pinimg.com/736x/a3/78/c6/a378c69e902b72c0388cd9a62941d476.jpg",
-            "B1": "https://i.pinimg.com/736x/8c/c4/42/8cc442be192a4ec86bd32c2246a52782.jpg",
-            "B2": "https://i.pinimg.com/736x/18/29/e1/1829e14b0e169a908ac9edd84de9d581.jpg",
-            "C1": "https://i.pinimg.com/736x/a3/78/c6/a378c69e902b72c0388cd9a62941d476.jpg",
-            "C2": "https://i.pinimg.com/736x/8c/c4/42/8cc442be192a4ec86bd32c2246a52782.jpg"
+            "A1": "https://i.pinimg.com/736x/bf/2f/2b/bf2f2b329ac9b880b2f69cb71af0d274.jpg",
+            "A2": "https://i.pinimg.com/736x/bf/2f/2b/bf2f2b329ac9b880b2f69cb71af0d274.jpg",
+            "A3": "https://i.pinimg.com/736x/bf/2f/2b/bf2f2b329ac9b880b2f69cb71af0d274.jpg",
+            "B1": "https://i.pinimg.com/736x/bf/2f/2b/bf2f2b329ac9b880b2f69cb71af0d274.jpg",
+            "B2": "https://i.pinimg.com/736x/bf/2f/2b/bf2f2b329ac9b880b2f69cb71af0d274.jpg",
+            "C1": "https://i.pinimg.com/736x/bf/2f/2b/bf2f2b329ac9b880b2f69cb71af0d274.jpg",
+            "C2": "https://i.pinimg.com/736x/bf/2f/2b/bf2f2b329ac9b880b2f69cb71af0d274.jpg"
         };
 
-        const roomImages = {
-            "A1101": "https://i.pinimg.com/736x/f5/a9/24/f5a924caec914ff546e809bc4a785285.jpg",
-            "A1102": "https://i.pinimg.com/736x/80/7e/83/807e83b0b2d25c447811cb3771f36d69.jpg",
-            "A2201": "https://i.pinimg.com/236x/bf/0b/49/bf0b49a2ca9a986ded94f74dbb418231.jpg",
-            // เพิ่มรูปภาพสำหรับห้องอื่นๆ ตามต้องการ
-        };
-
+        // ข้อมูลห้องพักแบบครบถ้วน
         const roomData = {
-            "A1101": { price: 3500, status: "unavailable" },
-            "A1102": { price: 4000, status: "unavailable" },
-            "A2201": { price: 4500, status: "available" },
-            "A2202": { price: 3800, status: "maintenance" },
-            "B1101": { price: 3200, status: "available" },
-            "B1102": { price: 3900, status: "unavailable" },
-            // เพิ่มข้อมูลห้องอื่นๆ ตามต้องการ
+            "A1101": {
+                price: 3500,
+                status: "available",
+                location: { lat: 13.7563, lng: 100.5018 },
+                images: [],
+                features: [
+                    { icon: "fas fa-bed", text: "เตียงขนาด 6 ฟุต" },
+                    { icon: "fas fa-wind", text: "เครื่องปรับอากาศ" },
+                    { icon: "fas fa-tv", text: "ทีวี 43 นิ้ว" },
+                    { icon: "fas fa-ban-smoking", text: "ห้ามสูบบุหรี่" },
+                    { icon: "fas fa-bath", text: "ห้องน้ำในตัว" }
+                ]
+            },
+            "A1102": {
+                price: 4000,
+                status: "available",
+                location: { lat: 13.7565, lng: 100.5020 },
+                images: [],
+                features: [
+                    { icon: "fas fa-bed", text: "เตียงขนาด 5 ฟุต" },
+                    { icon: "fas fa-wifi", text: "อินเทอร์เน็ตไร้สาย" },
+                    { icon: "fas fa-bath", text: "ห้องน้ำในตัว" }
+                ]
+            },
+            "A1201": {
+                price: 4500,
+                status: "available",
+                location: { lat: 13.7564, lng: 100.5019 },
+                images: [],
+                features: [
+                    { icon: "fas fa-couch", text: "โซฟา" },
+                    { icon: "fas fa-tv", text: "ทีวี 50 นิ้ว" },
+                    { icon: "fas fa-wind", text: "เครื่องปรับอากาศ" }
+                ]
+            },
+            // ... เพิ่มหรือแก้ไขข้อมูลห้องอื่นๆ ตามต้องการ ...
+        };
+
+        // ข้อมูลภาพห้องพัก
+        const roomImages = {
+            "A1101": [
+                "https://i.pinimg.com/736x/50/c5/d6/50c5d68cad37e7d490d6a3f6e5432ee0.jpg",
+                "https://i.pinimg.com/736x/50/c5/d6/50c5d68cad37e7d490d6a3f6e5432ee0.jpg",
+                "https://i.pinimg.com/736x/50/c5/d6/50c5d68cad37e7d490d6a3f6e5432ee0.jpg",
+                "https://i.pinimg.com/736x/50/c5/d6/50c5d68cad37e7d490d6a3f6e5432ee0.jpg",
+                "https://i.pinimg.com/736x/50/c5/d6/50c5d68cad37e7d490d6a3f6e5432ee0.jpg",
+                "https://i.pinimg.com/736x/50/c5/d6/50c5d68cad37e7d490d6a3f6e5432ee0.jpg"
+            ],
+            "A1102": [
+                "https://i.pinimg.com/736x/50/c5/d6/50c5d68cad37e7d490d6a3f6e5432ee0.jpg",
+                "https://i.pinimg.com/736x/50/c5/d6/50c5d68cad37e7d490d6a3f6e5432ee0.jpg"
+            ],
+            // ... เพิ่มข้อมูลภาพสำหรับห้องอื่นๆ ...
+        };
+
+        const roomTikToks = {
+            "A1101": "https://www.tiktok.com/@parent.room/video/7466280434284924168",
+            "A1102": "https://www.tiktok.com/@parent.room/video/7466280434284924168",
+            "A2201": "https://www.tiktok.com/@parent.room/video/7466280434284924168"
         };
 
         let currentPath = [];
@@ -391,13 +539,23 @@
             const detailContainer = document.getElementById("roomDetailContainer");
             detailContainer.classList.remove("hidden");
 
-            // Get room data
             const roomKey = building + floor + room;
-            const roomInfo = roomData[roomKey] || { price: 4400, status: 'available' };
+            const tiktokUrl = roomTikToks[roomKey];
+            const roomInfo = roomData[roomKey] || { price: 4400, status: 'available', features: [] };
             const statusDisplay = getRoomStatusDisplay(roomInfo.status);
+            const roomImageSrc = roomImages[roomKey] ? roomImages[roomKey][0] : "/api/placeholder/400/320";
             
-            // Get room image
-            const roomImageSrc = roomImages[roomKey] || "https://www.lh.co.th/_next/image?url=https%3A%2F%2Flh-assets.lh.co.th%2Fimages%2Foriginal%2Fprojects%2F94c66f67-f6c5-4ecb-9337-99d72ca58b38%2Fprojects-language%2F6e3ed7a6-e962-414e-861d-5d054e1293aa%2Fthai%2Fpage-setting%2Fd9da708a-59ed-4422-b001-4150370287d5%2F3b5211c7-5d78-4185-b542-8e0daa474026.jpeg&w=3840&q=75";
+            const tiktokEmbed = tiktokUrl 
+                ? `<div class="tiktok-embed-container">
+                    <blockquote 
+                        class="tiktok-embed" 
+                        cite="${tiktokUrl}"
+                        data-video-id="${tiktokUrl.split('/').pop()}" 
+                        style="max-width: 605px;min-width: 325px;">
+                        <section></section>
+                    </blockquote>
+                   </div>`
+                : '<div style="text-align: center; padding: 20px; background: #f5f5f5; border-radius: 8px;">ไม่มีวิดีโอสำหรับห้องนี้</div>';
 
             detailContainer.innerHTML = `
                 <div class="room-detail">
@@ -405,15 +563,13 @@
                         <div>
                             <img src="${roomImageSrc}" alt="Room Main Image" style="width: 100%; border-radius: 8px;">
                             <div class="room-images">
-                                ${Array(6).fill(0).map((_, i) => `
-                                    <img src="${roomImageSrc}" alt="Room Image ${i + 1}" onclick="showImage(this.src)">
-                                `).join('')}
+                                ${roomImages[roomKey] ? roomImages[roomKey].map((src, i) => `
+                                    <img src="${src}" alt="Room Image ${i + 1}" onclick="showImage(this.src, ${i})">
+                                `).join('') : ''}
                             </div>
-                            <video class="room-video" controls>
-                                <source src="room-tour.mp4" type="video/mp4">
-                                Your browser does not support the video tag.
-                            </video>
+                            ${tiktokEmbed}
                         </div>
+
                         <div class="room-info">
                             <h2>ห้อง ${room}</h2>
                             <div class="price">฿${roomInfo.price.toLocaleString()} / เดือน</div>
@@ -422,7 +578,7 @@
                             </div>
                             <p>ห้องพักขนาด 28 ตารางเมตร พร้อมเฟอร์นิเจอร์และเครื่องใช้ไฟฟ้าครบครัน</p>
                             <div class="room-features">
-                                ${roomDetails.features.map(feature => `
+                                ${roomInfo.features.map(feature => `
                                     <div class="feature-item">
                                         <i class="${feature.icon}"></i>
                                         <span>${feature.text}</span>
@@ -430,7 +586,7 @@
                                 `).join('')}
                             </div>
                             ${roomInfo.status === 'available' ? `
-                                <button onclick="alert('ระบบจองห้องพักจะเปิดให้บริการเร็วๆ นี้')" 
+                                <button onclick="showBookingForm('${building}${floor}${room}')" 
                                         style="background: #2196f3; color: white; border: none; padding: 12px 30px; 
                                             border-radius: 8px; cursor: pointer; font-family: 'Prompt', sans-serif; 
                                             margin-top: 15px;">
@@ -448,23 +604,52 @@
                 </div>
             `;
 
-            // Initialize map
-            if (map) map.remove();
-            map = L.map('map').setView([roomDetails.location.lat, roomDetails.location.lng], 16);
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: '© OpenStreetMap contributors'
-            }).addTo(map);
-            L.marker([roomDetails.location.lat, roomDetails.location.lng]).addTo(map);
+        // ดึงข้อมูลตำแหน่งห้องและสร้างแผนที่
+        const roomLocation = roomInfo.location || { lat: 13.7563, lng: 100.5018 };
+        if (map) map.remove();
+        map = L.map('map').setView([roomLocation.lat, roomLocation.lng], 18);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+        const marker = L.marker([roomLocation.lat, roomLocation.lng]).addTo(map);
+        marker.bindPopup(`
+            <b>ห้อง ${room}</b><br>
+            ตึก ${building} ชั้น ${floor}<br>
+            ราคา: ฿${roomInfo.price.toLocaleString()}/เดือน
+        `).openPopup();
+        
+        if (tiktokUrl) {
+            const existingScript = document.querySelector('script[src="https://www.tiktok.com/embed.js"]');
+            if (existingScript) existingScript.remove();
+            const script = document.createElement('script');
+            script.src = 'https://www.tiktok.com/embed.js';
+            document.body.appendChild(script);
         }
+    }
 
-        function showImage(src) {
+        // ระบบสไลด์ภาพ
+        let currentImageIndex = 0;
+        let currentRoomImages = [];
+
+        function showImage(src, index) {
             const modal = document.getElementById("imageModal");
-            const modalImg = document.getElementById("modalImage");
+            currentImageIndex = index;
+            const roomKey = Object.keys(roomImages).find(key => roomImages[key].includes(src));
+            currentRoomImages = roomImages[roomKey] || [];
+            updateModalImage(src);
             modal.style.display = "flex";
-            modalImg.src = src;
         }
 
-        // Previous functions updated to include room detail view
+        function navigateImage(direction) {
+            if(currentRoomImages.length === 0) return;
+            currentImageIndex = (currentImageIndex + direction + currentRoomImages.length) % currentRoomImages.length;
+            updateModalImage(currentRoomImages[currentImageIndex]);
+        }
+
+        function updateModalImage(src) {
+            document.getElementById("modalImage").src = src;
+        }
+
         function showRooms(building, floor) {
             document.getElementById("floorContainer").classList.add("hidden");
             document.getElementById("roomDetailContainer").classList.add("hidden");
@@ -474,38 +659,43 @@
 
             let key = building + floor;
             rooms[key].forEach(room => {
-                const isAvailable = Math.random() > 0.3;
-                // สร้าง key สำหรับดึงรูปภาพห้อง
                 const roomKey = building + floor + room;
-                const roomImageSrc = roomImages[roomKey] || "https://www.lh.co.th/_next/image?url=https%3A%2F%2Flh-assets.lh.co.th%2Fimages%2Foriginal%2Fprojects%2F94c66f67-f6c5-4ecb-9337-99d72ca58b38%2Fprojects-language%2F6e3ed7a6-e962-414e-861d-5d054e1293aa%2Fthai%2Fpage-setting%2Fd9da708a-59ed-4422-b001-4150370287d5%2F3b5211c7-5d78-4185-b542-8e0daa474026.jpeg&w=3840&q=75";
+                const roomInfo = roomData[roomKey] || { price: 4400, status: 'available', images: [] };
+                const statusDisplay = getRoomStatusDisplay(roomInfo.status);
+                const images = (roomInfo.images && roomInfo.images.length) ? roomInfo.images : (roomImages[roomKey] || []);
+                const roomImageSrc = images.length ? images[0] : "/api/placeholder/400/320";
                 
                 let card = document.createElement("div");
                 card.className = "card";
                 card.innerHTML = `
-                    <!-- แก้ไขที่นี่: รูปภาพห้อง -->
                     <img src="${roomImageSrc}" alt="ห้อง ${room}">
-                    <div class="status-badge">${isAvailable ? 'ว่าง' : 'ไม่ว่าง'}</div>
+                    <div class="status-badge" style="background-color: ${statusDisplay.color}">
+                        ${statusDisplay.text}
+                    </div>
                     <div class="card-content">
                         <h3>ห้อง ${room}</h3>
-                        <div class="price">฿4,400.00 / เดือน</div>
+                        <div class="price">฿${roomInfo.price.toLocaleString()} / เดือน</div>
                         <button onclick="event.stopPropagation(); showRoomDetail('${building}', '${floor}', '${room}')" 
                                 style="margin-top: 15px; background: #1a237e; color: white; border: none; 
-                                       padding: 8px 20px; border-radius: 6px; cursor: pointer; font-family: 'Prompt', sans-serif;">
+                                    padding: 8px 20px; border-radius: 6px; cursor: pointer; font-family: 'Prompt', sans-serif;">
                             ดูรายละเอียด
                         </button>
-                        ${isAvailable ? `
-                            <button onclick="event.stopPropagation(); alert('ระบบจองห้องพักจะเปิดให้บริการเร็วๆ นี้')" 
-                                    style="margin-top: 10px; background: #2196f3; color: white; border: none; 
-                                           padding: 8px 20px; border-radius: 6px; cursor: pointer; font-family: 'Prompt', sans-serif;">
-                                จองห้องพัก
-                            </button>
+                        ${roomInfo.status === 'available' ? `
+                    <button 
+                        onclick="event.stopPropagation(); showBookingForm('${building}${floor}${room}')" 
+                        style="margin-top: 10px; background: #2196f3; color: white; border: none; 
+                            padding: 8px 20px; border-radius: 6px; cursor: pointer; font-family: 'Prompt', sans-serif;">
+                        จองห้องพัก
+                    </button>
                         ` : ''}
                     </div>
                 `;
-                if (!isAvailable) {
-                    card.style.opacity = "0.8";
-                    card.querySelector('.status-badge').style.background = "#f44336";
-                }
+                card.onclick = () => {
+                    showRoomDetail(building, floor, room);
+                    currentPath = [building, floor, room];
+                    updateBreadcrumb();
+                    showBackButton();
+                };
                 container.appendChild(card);
             });
         }
@@ -520,13 +710,11 @@
             document.getElementById("roomDetailContainer").classList.add("hidden");
 
             buildings.forEach(building => {
-                // ใช้รูปภาพจาก buildingImages ถ้ามี หรือใช้รูปภาพเริ่มต้น
-                const imageSrc = buildingImages[building] || "https://www.lh.co.th/_next/image?url=https%3A%2F%2Flh-assets.lh.co.th%2Fimages%2Foriginal%2Fprojects%2F94c66f67-f6c5-4ecb-9337-99d72ca58b38%2Fprojects-language%2F6e3ed7a6-e962-414e-861d-5d054e1293aa%2Fthai%2Fpage-setting%2Fd9da708a-59ed-4422-b001-4150370287d5%2F3b5211c7-5d78-4185-b542-8e0daa474026.jpeg&w=3840&q=75";
+                const imageSrc = buildingImages[building] || "/api/placeholder/400/320";
                 
                 let card = document.createElement("div");
                 card.className = "card";
                 card.innerHTML = `
-                    <!-- แก้ไขที่นี่: รูปภาพตึก -->
                     <img src="${imageSrc}" alt="ตึก ${building}">
                     <div class="card-content">
                         <h3>ตึก ${building}</h3>
@@ -551,14 +739,12 @@
             container.classList.remove("hidden");
 
             floors[building].forEach(floor => {
-                // สร้าง key สำหรับดึงรูปภาพชั้น
                 const floorKey = building + floor;
-                const floorImageSrc = floorImages[floorKey] || "https://www.lh.co.th/_next/image?url=https%3A%2F%2Flh-assets.lh.co.th%2Fimages%2Foriginal%2Fprojects%2F94c66f67-f6c5-4ecb-9337-99d72ca58b38%2Fprojects-language%2F6e3ed7a6-e962-414e-861d-5d054e1293aa%2Fthai%2Fpage-setting%2Fd9da708a-59ed-4422-b001-4150370287d5%2F3b5211c7-5d78-4185-b542-8e0daa474026.jpeg&w=3840&q=75";
+                const floorImageSrc = floorImages[floorKey] || "/api/placeholder/400/320";
                 
                 let card = document.createElement("div");
                 card.className = "card";
                 card.innerHTML = `
-                    <!-- แก้ไขที่นี่: รูปภาพชั้น -->
                     <img src="${floorImageSrc}" alt="ชั้น ${floor}">
                     <div class="card-content">
                         <h3>ชั้น ${floor}</h3>
@@ -584,59 +770,22 @@
             return statusMap[status] || { text: 'ไม่ทราบสถานะ', color: '#9E9E9E' };
         }
 
-        function showRooms(building, floor) {
-            document.getElementById("floorContainer").classList.add("hidden");
-            document.getElementById("roomDetailContainer").classList.add("hidden");
-            let container = document.getElementById("roomContainer");
-            container.innerHTML = "";
-            container.classList.remove("hidden");
-
-            let key = building + floor;
-            rooms[key].forEach(room => {
-                const roomKey = building + floor + room;
-                const roomInfo = roomData[roomKey] || { price: 4400, status: 'available' };
-                const statusDisplay = getRoomStatusDisplay(roomInfo.status);
-                const roomImageSrc = roomImages[roomKey] || "default-room-image.jpg";
-                
-                let card = document.createElement("div");
-                card.className = "card";
-                card.innerHTML = `
-                    <img src="${roomImageSrc}" alt="ห้อง ${room}">
-                    <div class="status-badge" style="background-color: ${statusDisplay.color}">
-                        ${statusDisplay.text}
-                    </div>
-                    <div class="card-content">
-                        <h3>ห้อง ${room}</h3>
-                        <div class="price">฿${roomInfo.price.toLocaleString()} / เดือน</div>
-                        <button onclick="event.stopPropagation(); showRoomDetail('${building}', '${floor}', '${room}')" 
-                                style="margin-top: 15px; background: #1a237e; color: white; border: none; 
-                                    padding: 8px 20px; border-radius: 6px; cursor: pointer; font-family: 'Prompt', sans-serif;">
-                            ดูรายละเอียด
-                        </button>
-                        ${roomInfo.status === 'available' ? `
-                            <button onclick="event.stopPropagation(); alert('ระบบจองห้องพักจะเปิดให้บริการเร็วๆ นี้')" 
-                                    style="margin-top: 10px; background: #2196f3; color: white; border: none; 
-                                        padding: 8px 20px; border-radius: 6px; cursor: pointer; font-family: 'Prompt', sans-serif;">
-                                จองห้องพัก
-                            </button>
-                        ` : ''}
-                    </div>
-                `;
-                container.appendChild(card);
-            });
-        }
-
+        // ระบบค้นหาขั้นสูง
         function filterBuildings() {
             const searchText = document.getElementById('searchInput').value.toLowerCase();
-            const buildingCards = document.querySelectorAll('#buildingContainer .card');
+            const elementsToFilter = [
+                ...document.querySelectorAll('#buildingContainer .card'),
+                ...document.querySelectorAll('#floorContainer .card'),
+                ...document.querySelectorAll('#roomContainer .card')
+            ];
 
-            buildingCards.forEach(card => {
-                const buildingName = card.querySelector('h3').innerText.toLowerCase();
-                card.style.display = buildingName.includes(searchText) ? 'block' : 'none';
+            elementsToFilter.forEach(element => {
+                const text = element.querySelector('h3').innerText.toLowerCase();
+                const status = element.querySelector('.status-badge')?.innerText.toLowerCase() || '';
+                element.style.display = text.includes(searchText) || status.includes(searchText) ? 'block' : 'none';
             });
         }
 
-        // Close modal when clicking outside
         window.onclick = function(event) {
             const modal = document.getElementById("imageModal");
             if (event.target == modal) {
@@ -648,8 +797,70 @@
             document.getElementById("imageModal").style.display = "none";
         }
 
+        // ระบบจองห้องพัก
+        function showBookingForm(roomId) {
+            Swal.fire({
+                title: `จองห้อง ${roomId}`,
+                html: `
+                    <input type="text" id="name" class="swal2-input" placeholder="ชื่อ-สกุล" required>
+                    <input type="email" id="email" class="swal2-input" placeholder="อีเมล" required>
+                    <input type="tel" id="phone" class="swal2-input" placeholder="เบอร์โทรศัพท์" pattern="[0-9]{10}" required>
+                    <select id="duration" class="swal2-input" required>
+                        <option value="">เลือกระยะเวลาจอง</option>
+                        <option value="3">3 เดือน</option>
+                        <option value="6">6 เดือน</option>
+                        <option value="12">12 เดือน</option>
+                    </select>
+                `,
+                confirmButtonText: 'ยืนยันการจอง',
+                showCancelButton: true,
+                focusConfirm: false,
+                preConfirm: () => {
+                    return {
+                        name: document.getElementById('name').value,
+                        email: document.getElementById('email').value,
+                        phone: document.getElementById('phone').value,
+                        duration: document.getElementById('duration').value
+                    }
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'จองห้องสำเร็จ!',
+                        text: 'ระบบจะส่งอีเมลยืนยันให้คุณภายใน 24 ชั่วโมง',
+                    });
+                }
+            });
+        }
+
+        // แก้ไขส่วนแสดงแผนที่
+        function initMap(roomLocation, room, building, floor) {
+            if(map) map.remove();
+            
+            map = L.map('map', {
+                zoomControl: false
+            }).setView([roomLocation.lat, roomLocation.lng], 18);
+
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+
+            L.control.zoom({
+                position: 'topright'
+            }).addTo(map);
+
+            const customIcon = L.icon({
+                iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png',
+                iconSize: [25, 41],
+                iconAnchor: [12, 41]
+            });
+
+            L.marker([roomLocation.lat, roomLocation.lng], { icon: customIcon })
+                .addTo(map)
+                .bindPopup(`<b>ห้อง ${room}</b><br>ตึก ${building} ชั้น ${floor}`);
+        }
+
         showBuildings();
     </script>
+    <a href="social.html" class="link">Social Media</a>
 </body>
-<a href="social.html" class="link">Shop Room</a>
 </html>
